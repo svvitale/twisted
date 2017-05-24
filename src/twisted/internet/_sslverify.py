@@ -11,13 +11,22 @@ import warnings
 from constantly import Names, NamedConstant
 from hashlib import md5
 
+import OpenSSL
 from OpenSSL import SSL, crypto
 
 from twisted.python import log
 from twisted.python._oldstyle import _oldStyle
 from ._idna import _idnaBytes
 
+MINIMUM_PYOPENSSL_VERSION = (16, 0, 0)
 
+# Pull the version from OpenSSL and build a major/minor/patch tuple.
+versionTuple = tuple(map(int, OpenSSL.version.__version__.split('.')))
+
+if versionTuple < MINIMUM_PYOPENSSL_VERSION:
+    warnings.warn("Insufficient version of PyOpenSSL. Please install {} or greater if you intend to use SSL."
+                  .format('.'.join(map(str, MINIMUM_PYOPENSSL_VERSION))),
+                  ImportWarning)
 
 
 class TLSVersion(Names):
