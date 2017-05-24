@@ -1,0 +1,1 @@
+Add warning when an incompatible version of PyOpenSSL is encountered.
